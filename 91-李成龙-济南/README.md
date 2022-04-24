@@ -1,1 +1,1 @@
-my gray and binary code.
+this is my first code commit.
