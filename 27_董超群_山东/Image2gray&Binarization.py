@@ -10,7 +10,6 @@ print("image_type:",type(image))
 print(image)
 # subplot(131) 原图
 plt.subplot(131)
-img = plt.imread("Image/lenna.png")
 plt.imshow(image)
 
 
