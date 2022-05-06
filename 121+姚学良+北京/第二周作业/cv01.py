@@ -24,3 +24,4 @@ cv2.waitKey(0)
 plt.subplot(223)
 plt.imshow(img_binary)
 plt.show()
+
