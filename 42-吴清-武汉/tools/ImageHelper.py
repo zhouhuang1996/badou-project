@@ -77,7 +77,6 @@ def image_linear(_filePath,target_x,target_y):
         for i in range(target_x):
             for j in range(target_y):
                 #获取当前点在经过中心重合对齐以及缩放后在原图的位置（P点）
-                #x=
                 point_p_x=( i+ 0.5) * s_x/target_x-0.5
                 #y=(x1-x)y0+(x-x0)y1
                 point_p_y = (j + 0.5) * s_y/target_y-0.5
@@ -110,12 +109,12 @@ def image_histogram(_filePath):
     for i in range(h):
         for j in range(w):
             grayValue=img_gray[i, j] #当前点的灰度值
-            histogramArray[grayValue]=histogramArray[grayValue]+1
+            histogramArray[grayValue]=histogramArray[grayValue]+1 #记录当前灰度值的数量
     #计算累积分布直方图
     h_sum=histogramArray[0]
     for i in range(256):
         h_sum+=histogramArray[i]
-        LUT[i]=255* h_sum / (w*h)
+        LUT[i]=255* h_sum / (w*h) #存储均衡化后的值
     for i in range(h):
         for j in range(w):
             # 均衡化处理
