@@ -10,7 +10,7 @@ from skimage.color import rgb2gray
 # 灰度化
 
 
-img = cv2.imread("lenna.png")
+img = cv2.imread("2020_03_14.png")
 h, w = img.shape[:2]  # 获取图像的高和宽
 img_gray = np.zeros([h, w], img.dtype)  # 创建一张和当前图像大小一样的单通道图像
 for i in range(h):
@@ -36,7 +36,7 @@ cv2.waitKey(0)
 #原图
 plt.subplot(221)
 # img = cv2.imread("lenna.png")     cv和plt的区别
-img = plt.imread("lenna.png")
+img = plt.imread("2020_03_14.png")
 plt.imshow(img)
 print("---image lenna----")
 print(img)
