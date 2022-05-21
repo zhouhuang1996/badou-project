@@ -45,7 +45,7 @@ def do_canny(img):
     img_tidu_x = np.zeros(img_new.shape)  # 存储梯度图像
     img_tidu_y = np.zeros([dx, dy])
     img_tidu = np.zeros(img_new.shape)
-
+    jiaodu = np.zeros(img_new.shape)
 
     print('img_tidu_x',img_tidu_x.shape)
     print('img_tidu_y',img_tidu_y.shape)
@@ -57,13 +57,19 @@ def do_canny(img):
             img_tidu_x[i, j] = np.sum(img_pad[i:i + 3, j:j + 3] * sobel_kernel_x)  # x方向
             img_tidu_y[i, j] = np.sum(img_pad[i:i + 3, j:j + 3] * sobel_kernel_y)  # y方向
             img_tidu[i, j] = np.sqrt(img_tidu_x[i, j] ** 2 + img_tidu_y[i, j] ** 2)   #计算梯度值
+            jiaodu[i,j] = math.degrees(math.atan2(img_tidu_y[i, j],img_tidu_x[i, j]))
+
+            if jiaodu[i,j] < 0:
+                jiaodu[i, j] = jiaodu[i,j] + 360
+
 
     img_tidu_x[img_tidu_x == 0] = 0.00000001 #避免除以0 非法操作
     img_tidu_y[img_tidu_y == 0] = 0.00000001  # 避免除以0 非法操作
     #angle = img_tidu_y / img_tidu_x
 
-    tantheta = img_tidu_y / img_tidu_x   #tan0
-    jiaodu = tantheta * 180/np.pi #转化为度数
+    angle = img_tidu_y / img_tidu_x   #tan0
+    #jiaodu = tantheta * 180/np.pi #转化为度数
+   #jiaodu = np.degrees(angle)
 
     print('----------jiaodu:',jiaodu)
     #angle = np.arctan(img_tidu_y / img_tidu_x)
@@ -85,8 +91,10 @@ def do_canny(img):
             #通过角度判断方向
             if (jiaodu[i,j] >= 0 and jiaodu[i,j] <= 45) or (jiaodu[i,j] >= -180 and jiaodu[i,j] <= -145):
                 #梯度线性插值
-                gp1 = (1-tantheta[i,j])*temp[2, 1] + tantheta[i,j]*temp[2, 2]
-                gp2 = (1-tantheta[i,j])*temp[0, 1] + tantheta[i,j]*temp[0, 0]
+                #gp1 = (1-angle[i,j])*temp[2, 1] + angle[i,j]*temp[2, 2]
+                #gp2 = (1-angle[i,j])*temp[0, 1] + angle[i,j]*temp[0, 0]
+                gp1 = (1-angle[i,j])*temp[1, 2] + angle[i,j]*temp[0, 2]
+                gp2 = (1-angle[i,j])*temp[1, 0] + angle[i,j]*temp[2, 0]
 
                 if not ((img_tidu[i, j] >= gp1) and (img_tidu[i, j] >= gp2)):
                     flag = False
@@ -94,8 +102,10 @@ def do_canny(img):
 
             elif  (jiaodu[i,j] > 45 and jiaodu[i,j] <= 90) or (jiaodu[i,j] > -145 and jiaodu[i,j] <= -90):
 
-                gp1 = (1 - tantheta[i, j]) * temp[1, 2] + tantheta[i, j] * temp[2, 2]
-                gp2 = (1 - tantheta[i, j]) * temp[1, 0] + tantheta[i, j] * temp[0, 0]
+                #gp1 = (1 - angle[i, j]) * temp[1, 2] + angle[i, j] * temp[2, 2]
+                #gp2 = (1 - angle[i, j]) * temp[1, 0] + angle[i, j] * temp[0, 0]
+                gp1 = (1 - angle[i, j]) * temp[0, 1] + angle[i, j] * temp[0, 2]
+                gp2 = (1 - angle[i, j]) * temp[2, 1] + angle[i, j] * temp[2, 0]
 
                 if not ((img_tidu[i, j] >= gp1) and (img_tidu[i, j] >= gp2)):
                     flag = False
@@ -103,8 +113,10 @@ def do_canny(img):
 
             elif (jiaodu[i, j] > 90 and jiaodu[i,j] <= 145) or (jiaodu[i, j] > -145 and jiaodu[i, j] <= -90):
 
-                gp1 = (1 - tantheta[i, j]) * temp[1, 2] + tantheta[i, j] * temp[0, 2]
-                gp2 = (1 - tantheta[i, j]) * temp[1, 0] + tantheta[i, j] * temp[2, 0]
+                #gp1 = (1 - angle[i, j]) * temp[1, 2] + angle[i, j] * temp[0, 2]
+                #gp2 = (1 - angle[i, j]) * temp[1, 0] + angle[i, j] * temp[2, 0]
+                gp1 = (1 - angle[i, j]) * temp[0, 1] + angle[i, j] * temp[0, 0]
+                gp2 = (1 - angle[i, j]) * temp[2, 1] + angle[i, j] * temp[2, 2]
 
                 if not ((img_tidu[i, j] >= gp1) and (img_tidu[i, j] >= gp2)):
                     flag = False
@@ -112,8 +124,10 @@ def do_canny(img):
 
             elif (jiaodu[i, j] > 145 and jiaodu[i,j] <= 180) or (jiaodu[i, j] > -90 and jiaodu[i,j] < 0):
 
-                gp1 = (1 - tantheta[i, j]) * temp[0, 1] + tantheta[i, j] * temp[0, 2]
-                gp2 = (1 - tantheta[i, j]) * temp[2, 1] + tantheta[i, j] * temp[2, 0]
+                #gp1 = (1 - angle[i, j]) * temp[0, 1] + angle[i, j] * temp[0, 2]
+                #gp2 = (1 - angle[i, j]) * temp[2, 1] + angle[i, j] * temp[2, 0]
+                gp1 = (1 - angle[i, j]) * temp[1, 0] + angle[i, j] * temp[0, 0]
+                gp2 = (1 - angle[i, j]) * temp[1, 2] + angle[i, j] * temp[2, 2]
 
                 if not ((img_tidu[i, j] >= gp1) and (img_tidu[i, j] >= gp2)):
                     flag = False
@@ -161,7 +175,7 @@ def do_canny(img):
  '''
 
     # 4、双阈值检测，连接边缘。遍历所有一定是边的点,查看8邻域是否存在有可能是边的点，进栈
-    lower_boundary = img_tidu.mean() * 0.58
+    lower_boundary = img_tidu.mean() * 0.8
     high_boundary = lower_boundary * 3  # 这里我设置高阈值是低阈值的三倍
     zhan = []
     for i in range(1, img_yizhi.shape[0] - 1):  # 外圈不考虑了
