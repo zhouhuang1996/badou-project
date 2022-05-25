@@ -240,3 +240,23 @@ def image_canny(_filePath):
     returnImages.append(img_yuzhi)
 
     return returnImages
+
+# 图像的矩阵变换
+# _filePath 图像文件路径
+# 2022-5-25
+def image_warp_martrix(_filePath):
+    returnImages = []
+    img = cv.imread(_filePath) #加载原始图像
+    returnImages.append(img)
+    trans_img=img.copy()
+    src = np.float32([[207, 151], [517, 285], [17, 601], [343, 731]])# 源图的四个角点
+    dst = np.float32([[0, 0], [337, 0], [0, 488], [337, 488]]) #源图4个点在目标图中的位置
+    print(img.shape)
+    # 生成透视变换矩阵；进行透视变换
+    martrix = cv.getPerspectiveTransform(src, dst)
+    print("warpMatrix:")
+    print(martrix)
+    result = cv.warpPerspective(trans_img, martrix, (337, 488))#通过变换矩阵，将源图变换成目标图
+    returnImages.append(result)
+
+    return returnImages
