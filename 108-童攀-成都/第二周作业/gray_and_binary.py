@@ -31,10 +31,12 @@ img_gray1 = np.zeros((img_h, img_w))
 print(img_gray1.shape)
 
 
+
 # In[5]:
 
 
 print(img[0, 0])
+
 
 
 # In[6]:
@@ -59,6 +61,7 @@ for i in range(img_h):
 print(img_gray1.shape)
 
 
+
 # In[9]:
 
 
@@ -71,6 +74,7 @@ plt.imshow(img_gray1, cmap='gray')
 # opencv接口灰度化
 img_gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 print(img_gray2.shape)
+
 
 
 # In[11]:
@@ -92,6 +96,7 @@ img_binary1 = np.zeros((img_h, img_w))
 print(img_binary1.shape)
 
 
+
 # In[13]:
 
 
@@ -106,6 +111,7 @@ for i in range(img_h):
 
 
 print(img_binary1)
+
 
 
 # In[15]:
